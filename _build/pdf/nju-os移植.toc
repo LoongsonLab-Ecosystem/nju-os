@@ -1,0 +1,63 @@
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{\numberline {1}项目介绍}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}环境准备}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}编译NJU\sphinxhyphen {}OS内核}{1}{section.1.2}%
+\contentsline {chapter}{\numberline {2}lab1}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}实验目的}{3}{section.2.1}%
+\contentsline {section}{\numberline {2.2}实验内容}{3}{section.2.2}%
+\contentsline {section}{\numberline {2.3}实验过程}{3}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}内核态初始化}{3}{subsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.1.1}kinit()}{3}{subsubsection.2.3.1.1}%
+\contentsline {subsubsection}{\numberline {2.3.1.2}vminit()}{3}{subsubsection.2.3.1.2}%
+\contentsline {subsubsection}{\numberline {2.3.1.3}trapinit()}{3}{subsubsection.2.3.1.3}%
+\contentsline {subsubsection}{\numberline {2.3.1.4}apic\_init()}{4}{subsubsection.2.3.1.4}%
+\contentsline {subsubsection}{\numberline {2.3.1.5}extioi\_init()}{4}{subsubsection.2.3.1.5}%
+\contentsline {subsubsection}{\numberline {2.3.1.6}binit()}{4}{subsubsection.2.3.1.6}%
+\contentsline {subsubsection}{\numberline {2.3.1.7}userinit()}{4}{subsubsection.2.3.1.7}%
+\contentsline {subsection}{\numberline {2.3.2}内核态向用户态跳转}{4}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}用户态}{4}{subsection.2.3.3}%
+\contentsline {subsubsection}{\numberline {2.3.3.1}printf}{4}{subsubsection.2.3.3.1}%
+\contentsline {paragraph}{\numberline {2.3.3.1.1}对于整数调用printint函数：}{6}{paragraph.2.3.3.1.1}%
+\contentsline {paragraph}{\numberline {2.3.3.1.2}对于指针地址调用printptr函数：}{6}{paragraph.2.3.3.1.2}%
+\contentsline {paragraph}{\numberline {2.3.3.1.3}对于字符或者字符串使用va\_arg()，然后putc输出。}{6}{paragraph.2.3.3.1.3}%
+\contentsline {subsubsection}{\numberline {2.3.3.2}main}{8}{subsubsection.2.3.3.2}%
+\contentsline {section}{\numberline {2.4}实验结果}{8}{section.2.4}%
+\contentsline {chapter}{\numberline {3}lab2}{9}{chapter.3}%
+\contentsline {section}{\numberline {3.1}实验目的}{9}{section.3.1}%
+\contentsline {section}{\numberline {3.2}实验内容}{9}{section.3.2}%
+\contentsline {section}{\numberline {3.3}背景知识}{9}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}进程与线程}{9}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}进程切换与堆栈切换}{10}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}实验过程}{11}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}进程}{11}{subsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.1.1}sys\_fork}{11}{subsubsection.3.4.1.1}%
+\contentsline {subsubsection}{\numberline {3.4.1.2}sys\_sleep}{12}{subsubsection.3.4.1.2}%
+\contentsline {subsubsection}{\numberline {3.4.1.3}sys\_exit}{13}{subsubsection.3.4.1.3}%
+\contentsline {subsection}{\numberline {3.4.2}线程}{13}{subsection.3.4.2}%
+\contentsline {subsubsection}{\numberline {3.4.2.1}pthread\_create}{13}{subsubsection.3.4.2.1}%
+\contentsline {subsubsection}{\numberline {3.4.2.2}pthread\_yield}{14}{subsubsection.3.4.2.2}%
+\contentsline {subsubsection}{\numberline {3.4.2.3}pthread\_join}{15}{subsubsection.3.4.2.3}%
+\contentsline {subsubsection}{\numberline {3.4.2.4}pthread\_exit}{16}{subsubsection.3.4.2.4}%
+\contentsline {subsubsection}{\numberline {3.4.2.5}main}{17}{subsubsection.3.4.2.5}%
+\contentsline {subsubsection}{\numberline {3.4.2.6}pthreadtest}{17}{subsubsection.3.4.2.6}%
+\contentsline {section}{\numberline {3.5}实验结果}{19}{section.3.5}%
+\contentsline {chapter}{\numberline {4}lab3}{20}{chapter.4}%
+\contentsline {section}{\numberline {4.1}实验目的}{20}{section.4.1}%
+\contentsline {section}{\numberline {4.2}实验内容}{20}{section.4.2}%
+\contentsline {section}{\numberline {4.3}实验过程}{20}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}内核态}{20}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}用户态}{20}{subsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.2.1}新增系统调用步骤}{20}{subsubsection.4.3.2.1}%
+\contentsline {paragraph}{\numberline {4.3.2.1.1}增加用户入口}{21}{paragraph.4.3.2.1.1}%
+\contentsline {paragraph}{\numberline {4.3.2.1.2}增加系统调用号}{21}{paragraph.4.3.2.1.2}%
+\contentsline {paragraph}{\numberline {4.3.2.1.3}修改 syscall.c 中的跳转表}{21}{paragraph.4.3.2.1.3}%
+\contentsline {paragraph}{\numberline {4.3.2.1.4}实现 sys\_seminit()}{21}{paragraph.4.3.2.1.4}%
+\contentsline {subsubsection}{\numberline {4.3.2.2}sys\_seminit 系统调用}{21}{subsubsection.4.3.2.2}%
+\contentsline {subsubsection}{\numberline {4.3.2.3}sys\_sempost 系统调用}{22}{subsubsection.4.3.2.3}%
+\contentsline {subsubsection}{\numberline {4.3.2.4}sys\_semwait 系统调用}{23}{subsubsection.4.3.2.4}%
+\contentsline {subsubsection}{\numberline {4.3.2.5}sys\_semdestroy 系统调用}{24}{subsubsection.4.3.2.5}%
+\contentsline {subsection}{\numberline {4.3.3}信号量解决生产者消费者问题}{25}{subsection.4.3.3}%
+\contentsline {subsubsection}{\numberline {4.3.3.1}main 函数}{25}{subsubsection.4.3.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.3.2}生产者进程}{26}{subsubsection.4.3.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3.3}消费者进程}{27}{subsubsection.4.3.3.3}%
+\contentsline {section}{\numberline {4.4}实验结果}{28}{section.4.4}%

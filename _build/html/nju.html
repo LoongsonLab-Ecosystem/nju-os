@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2. lab1 &mdash; NJU-OS移植 V1.0 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=b01b2dd9" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=3f0bcac8"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="_static/togglebutton.js?v=1ae7504c"></script>
+        <script src="_static/translations.js?v=beaddf03"></script>
+        <script src="_static/design-tabs.js?v=f930bc37"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="prev" title="1. 项目介绍" href="README.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <img src="_static/logo.svg" class="logo" alt="Logo"/>
+          <a href="index.html" class="icon icon-home">
+            NJU-OS移植
+          </a>
+              <div class="version">
+                V1.0
+              </div>
+<div role="search">
+  <form id="evas-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">1. 项目介绍</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="README.html#id2">1.1. 环境准备</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#nju-os">1.2. 编译NJU-OS内核</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. lab1</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">2.1. 实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">2.2. 实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">2.3. 实验过程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">2.3.1. 内核态初始化</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kinit">2.3.1.1. kinit()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vminit">2.3.1.2. vminit()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#trapinit">2.3.1.3. trapinit()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#apic-init">2.3.1.4. apic_init()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#extioi-init">2.3.1.5. extioi_init()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#binit">2.3.1.6. binit()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#userinit">2.3.1.7. userinit()</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">2.3.2. 内核态向用户态跳转</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">2.3.3. 用户态</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#printf">2.3.3.1. printf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#main">2.3.3.2. main</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">2.4. 实验结果</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#lab2">3. lab2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id8">3.1. 实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">3.2. 实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">3.3. 背景知识</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">3.3.1. 进程与线程</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">3.3.2. 进程切换与堆栈切换</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id13">3.4. 实验过程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id14">3.4.1. 进程</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sys-fork">3.4.1.1. sys_fork</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sys-sleep">3.4.1.2. sys_sleep</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sys-exit">3.4.1.3. sys_exit</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">3.4.2. 线程</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pthread-create">3.4.2.1. pthread_create</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pthread-yield">3.4.2.2. pthread_yield</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pthread-join">3.4.2.3. pthread_join</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pthread-exit">3.4.2.4. pthread_exit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id16">3.4.2.5. main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pthreadtest">3.4.2.6. pthreadtest</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id17">3.5. 实验结果</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#lab3">4. lab3</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id18">4.1. 实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id19">4.2. 实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id20">4.3. 实验过程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id21">4.3.1. 内核态</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id22">4.3.2. 用户态</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id23">4.3.2.1. 新增系统调用步骤</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id26">4.3.2.2. sys_seminit 系统调用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sys-sempost">4.3.2.3. sys_sempost 系统调用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sys-semwait">4.3.2.4. sys_semwait 系统调用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sys-semdestroy">4.3.2.5. sys_semdestroy 系统调用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id27">4.3.3. 信号量解决生产者消费者问题</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id28">4.3.3.1. main 函数</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id29">4.3.3.2. 生产者进程</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id30">4.3.3.3. 消费者进程</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id31">4.4. 实验结果</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NJU-OS移植</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">2. </span>lab1</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lab1">
+<h1><span class="section-number">2. </span>lab1<a class="headerlink" href="#lab1" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2><span class="section-number">2.1. </span>实验目的<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>实现一个简单的应用程序，并在其中调用两个自定义实现的系统调用。</p></li>
+<li><p>了解基于中断实现系统调用的全过程。</p></li>
+</ol>
+</section>
+<section id="id2">
+<h2><span class="section-number">2.2. </span>实验内容<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>内核初始化。</p></li>
+<li><p>内核态向用户态的跳转（原实验为：Bootloader 从实模式进入保护模式，加载内核至内存，并跳转执行，内核加载用户程序至内存，对内核堆栈进行设置，通过 iret 切换至用户空间，执行用户程序。）</p></li>
+<li><p>用户程序调用自定义实现的库函数 scanf 完成格式化输入和 printf 完成格式化输出。</p></li>
+<li><p>scanf 基于中断陷入内核，内核扫描按键状态获取输入完成格式化输入（现阶段不需要考虑键盘中断）。</p></li>
+<li><p>printf 基于中断陷入内核，由内核完成在视频映射的显存地址中写入内容，完成字符串的打印。</p></li>
+</ol>
+</section>
+<section id="id3">
+<h2><span class="section-number">2.3. </span>实验过程<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<section id="id4">
+<h3><span class="section-number">2.3.1. </span>内核态初始化<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<section id="kinit">
+<h4><span class="section-number">2.3.1.1. </span>kinit()<a class="headerlink" href="#kinit" title="Link to this heading"></a></h4>
+<ol class="arabic simple">
+<li><p>初始化锁。</p></li>
+<li><p>初始化可用内存范围，将物理内存范围 [RAMBASE, RAMSTOP]标记为空闲可用。</p></li>
+</ol>
+</section>
+<section id="vminit">
+<h4><span class="section-number">2.3.1.2. </span>vminit()<a class="headerlink" href="#vminit" title="Link to this heading"></a></h4>
+<ol class="arabic simple">
+<li><p>分配一页物理内存作为内核页表，并清空页表内容(0)。</p></li>
+<li><p>为进程设置内核栈的虚拟地址映射。</p></li>
+<li><p>将内核页的物理地址写入pgdl寄存器。</p></li>
+<li><p>初始化tlb。</p></li>
+<li><p>设置了遍历页表的参数。</p></li>
+</ol>
+</section>
+<section id="trapinit">
+<h4><span class="section-number">2.3.1.3. </span>trapinit()<a class="headerlink" href="#trapinit" title="Link to this heading"></a></h4>
+<ol class="arabic simple">
+<li><p>初始化锁。</p></li>
+<li><p>配置异常配置寄存器ECFG，当中断发生时，CPU跳转到不同的处理函数，而不是统一的异常入口。</p></li>
+<li><p>配置定时器配置寄存器TCFG，定时器每计数0x1000000个CPU周期就触发一次中断。</p></li>
+<li><p>设置异常入口点，发生异常时，CPU跳转到kernelvec开始执行。</p></li>
+<li><p>设置TLB重填入口，当页表缺页时调用。</p></li>
+<li><p>设置机器错误异常处理入口，硬件错误时调用。</p></li>
+<li><p>开启中断。</p></li>
+</ol>
+</section>
+<section id="apic-init">
+<h4><span class="section-number">2.3.1.4. </span>apic_init()<a class="headerlink" href="#apic-init" title="Link to this heading"></a></h4>
+<ol class="arabic simple">
+<li><p>配置uart0串口中断，只允许uart0中断，屏蔽其他所有硬件中断。</p></li>
+</ol>
+</section>
+<section id="extioi-init">
+<h4><span class="section-number">2.3.1.5. </span>extioi_init()<a class="headerlink" href="#extioi-init" title="Link to this heading"></a></h4>
+<ol class="arabic simple">
+<li><p>使能中断。</p></li>
+</ol>
+</section>
+<section id="binit">
+<h4><span class="section-number">2.3.1.6. </span>binit()<a class="headerlink" href="#binit" title="Link to this heading"></a></h4>
+<p>构建双向循环链表。<br />
+双向循环链表：每个节点都有两个指针，一个指向前一个节点，一个指向后一个节点，因此可以从任意一个节点开始，双向遍历整个链表。<br />
+<img alt="这是图片" src="_images/img1.png" /></p>
+</section>
+<section id="userinit">
+<h4><span class="section-number">2.3.1.7. </span>userinit()<a class="headerlink" href="#userinit" title="Link to this heading"></a></h4>
+<ol class="arabic simple">
+<li><p>分配用户进程。</p></li>
+<li><p>将init程序的代码和数据映射到用户地址空间，设置用户态执行上下文，为第一次内核返回用户态做准备。</p></li>
+<li><p>设置进程名称，工作目录，进程状态，准备开启调度。</p></li>
+</ol>
+</section>
+</section>
+<section id="id5">
+<h3><span class="section-number">2.3.2. </span>内核态向用户态跳转<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>调度器遍历所有进程，找到状态为runnable的进程，设置状态为running，进行上下文的切换，跳转到p-&gt;context.ra所设置的forkret函数，先进行文件系统初始化，读取超级块进行魔数判断，成功后进入usertrapret()，设置下次trap的入口，保存内核状态到陷阱帧，设置返回地址，获取用户页表物理地址，进入userret(),通过ertn跳转到用户态。</p>
+</section>
+<section id="id6">
+<h3><span class="section-number">2.3.3. </span>用户态<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>在init.c中调用了printf和scanf函数，下面分别阐明调用过程和实现机制。</p>
+<section id="printf">
+<h4><span class="section-number">2.3.3.1. </span>printf<a class="headerlink" href="#printf" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">printf</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">fmt</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">va_list</span><span class="w"> </span><span class="n">ap</span><span class="p">;</span><span class="w"> </span>
+<span class="w">  </span><span class="n">va_start</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">fmt</span><span class="p">);</span><span class="w"> </span>
+<span class="w">  </span><span class="n">vprintf</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">fmt</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>通过va_start(ap, fmt)指向第一个可变参数，进入vprintf。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">vprintf</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">fmt</span><span class="p">,</span><span class="w"> </span><span class="kt">va_list</span><span class="w"> </span><span class="n">ap</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">fmt</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">    </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fmt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xff</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;%&#39;</span><span class="p">){</span>
+<span class="w">        </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;%&#39;</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">putc</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;%&#39;</span><span class="p">){</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;d&#39;</span><span class="p">){</span>
+<span class="w">        </span><span class="n">printint</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">va_arg</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">),</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;l&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printint</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">va_arg</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">uint64</span><span class="p">),</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;x&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printint</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">va_arg</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">),</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;p&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printptr</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">va_arg</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">uint64</span><span class="p">));</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;s&#39;</span><span class="p">){</span>
+<span class="w">        </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">va_arg</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">          </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;(null)&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span>
+<span class="w">          </span><span class="n">putc</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">);</span>
+<span class="w">          </span><span class="n">s</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;c&#39;</span><span class="p">){</span>
+<span class="w">        </span><span class="n">putc</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">va_arg</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">uint</span><span class="p">));</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;%&#39;</span><span class="p">){</span>
+<span class="w">        </span><span class="n">putc</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Unknown % sequence.  Print it to draw attention.</span>
+<span class="w">        </span><span class="n">putc</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;%&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">putc</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>分为state==0和state==%两种情况，当state==0时，直接输出，当state==%时对下一个字符进行判断，分别是%d - 十进制有符号整数，%l - 十进制无符号长整数，%x - 十六进制无符号整数，%p - 指针地址，%s - 字符串，%c - 字符，%% - 百分号字符，va_arg(ap,type)，得到当前ap所指向的可变参数的值，并将ap指向下一个可变参数。</p>
+<section id="printint">
+<h5><span class="section-number">2.3.3.1.1. </span>对于整数调用printint函数：<a class="headerlink" href="#printint" title="Link to this heading"></a></h5>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">void</span>
+<span class="nf">printint</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">base</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">sgn</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">neg</span><span class="p">;</span>
+<span class="w">  </span><span class="n">uint</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">neg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">sgn</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">xx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span>
+<span class="w">    </span><span class="n">neg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">xx</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xx</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">do</span><span class="p">{</span>
+<span class="w">    </span><span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digits</span><span class="p">[</span><span class="n">x</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">base</span><span class="p">];</span>
+<span class="w">  </span><span class="p">}</span><span class="k">while</span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">base</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">neg</span><span class="p">)</span>
+<span class="w">    </span><span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;-&#39;</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">while</span><span class="p">(</span><span class="o">--</span><span class="n">i</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="n">putc</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>base表示进制基数，sgn表示是否处理符号（1=有符号，0=无符号）、首先进行符号判断，如果是有符号，且数字&lt;0，先按照正数处理，最后再加“-”。定义数组static char digits[] = “0123456789ABCDEF”；逆序将每个字符放入数组，再逆序输出。</p>
+</section>
+<section id="printptr">
+<h5><span class="section-number">2.3.3.1.2. </span>对于指针地址调用printptr函数：<a class="headerlink" href="#printptr" title="Link to this heading"></a></h5>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">void</span>
+<span class="nf">printptr</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">uint64</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">  </span><span class="n">putc</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;0&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">putc</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;x&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">uint64</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;&lt;=</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span>
+<span class="w">    </span><span class="n">putc</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">digits</span><span class="p">[</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">uint64</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">4</span><span class="p">)]);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="va-arg-putc">
+<h5><span class="section-number">2.3.3.1.3. </span>对于字符或者字符串使用va_arg()，然后putc输出。<a class="headerlink" href="#va-arg-putc" title="Link to this heading"></a></h5>
+<p>putc函数：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">void</span>
+<span class="nf">putc</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>当调用write时</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.global write
+write:
+li.d $a7, SYS_write
+syscall 0
+jirl $zero, $ra, 0
+</pre></div>
+</div>
+<p>向a7寄存器写入SYS_write，之后硬件保存 PC+4 到 CSR_ERA，保存当前状态到 CSR_PRMD，切换到内核特权级（PLV=0），禁用中断，跳转到 CSR_EENTRY 指定的地址（我们设置的是 w_csr_eentry((uint64)uservec)）。进入usertrap()，进入syscall（）函数。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">syscall</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">;</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">proc</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myproc</span><span class="p">();</span>
+
+<span class="w">  </span><span class="n">num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">trapframe</span><span class="o">-&gt;</span><span class="n">a7</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">num</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">num</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">NELEM</span><span class="p">(</span><span class="n">syscalls</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">syscalls</span><span class="p">[</span><span class="n">num</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">trapframe</span><span class="o">-&gt;</span><span class="n">a0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">syscalls</span><span class="p">[</span><span class="n">num</span><span class="p">]();</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d %s: unknown sys call %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">num</span><span class="p">);</span>
+<span class="w">    </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">trapframe</span><span class="o">-&gt;</span><span class="n">a0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>通过p-&gt;trapframe-&gt;a0 = syscalls<a class="reference internal" href="#"><span class="xref myst">num</span></a>进入sys_write函数。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">uint64</span>
+<span class="nf">sys_write</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">file</span><span class="w"> </span><span class="o">*</span><span class="n">f</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="w">  </span><span class="n">uint64</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">argfd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">argint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">argaddr</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">filewrite</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>通过if(argfd(0, 0, &amp;f) &lt; 0 || argint(2, &amp;n) &lt; 0 || argaddr(1, &amp;p) &lt; 0)获取参数，包括fd、字节数、用户地址，传入 filewrite函数。因为打开的是设备文件，所以ret = devsw[f-&gt;major].write(1, addr, n);
+在console.c中的consoleinit中devsw[CONSOLE].write = consolewrite;所以进入consolewrite函数：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span>
+<span class="nf">consolewrite</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">user_src</span><span class="p">,</span><span class="w"> </span><span class="n">uint64</span><span class="w"> </span><span class="n">src</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">either_copyin</span><span class="p">(</span><span class="o">&amp;</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">user_src</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="o">+</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="n">uartputc</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>uartputc-&gt;uartstart-&gt;WriteReg，qemu通过读取寄存器将内容打印到控制台。
+scanf调用的是read逻辑与write相同不做描述。</p>
+</section>
+</section>
+<section id="main">
+<h4><span class="section-number">2.3.3.2. </span>main<a class="headerlink" href="#main" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span>
+<span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;console&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDWR</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span>
+<span class="w">        </span><span class="n">mknod</span><span class="p">(</span><span class="s">&quot;console&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">CONSOLE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">open</span><span class="p">(</span><span class="s">&quot;console&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDWR</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">dup</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// stdout</span>
+<span class="w">    </span><span class="n">dup</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// stderr</span>
+<span class="c1">//lab2</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;write a num</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">num</span><span class="p">);</span><span class="w">  </span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;what u write num is: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">num</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;lab2 success</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+
+
+<span class="w">   </span>
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>测试printf和scanf函数。</p>
+</section>
+</section>
+</section>
+<section id="id7">
+<h2><span class="section-number">2.4. </span>实验结果<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<p><img alt="这是图片" src="_images/img0.png" /></p>
+</section>
+</section>
+<section id="lab2">
+<h1><span class="section-number">3. </span>lab2<a class="headerlink" href="#lab2" title="Link to this heading"></a></h1>
+<section id="id8">
+<h2><span class="section-number">3.1. </span>实验目的<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>实现一个简单的任务调度。</p></li>
+<li><p>介绍基于时间中断进行进程切换以及纯用户态的非抢占式的线程切换完成任务调度的全过程。</p></li>
+</ol>
+</section>
+<section id="id9">
+<h2><span class="section-number">3.2. </span>实验内容<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>内核：实现进程切换机制，并提供系统调用 fork、sleep、exit。</p></li>
+<li><p>库：对上述系统调用进行封装；实现一个用户态的线程库，完成 pthread_create、
+pthread_join、pthread_yield、pthread_exit 等接口。</p></li>
+<li><p>用户：对上述库函数进行测试。</p></li>
+</ol>
+</section>
+<section id="id10">
+<h2><span class="section-number">3.3. </span>背景知识<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<section id="id11">
+<h3><span class="section-number">3.3.1. </span>进程与线程<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p>进程为操作系统资源分配的单位，每个进程都有独立的地址空间（代码段、数据段），独立的堆栈，独立的进程控制块；线程作为任务调度的基本单位，与进程的唯一区别在于其地址空间并非独立，而是与其他线程共享(创建这些线程的“进程”的地址空间)。以下为一个广义的进程（包括进程与线程）生命周期中的状态转换图。<br />
+<img alt="这是图片" src="_images/img2.png" /></p>
+<p>(1) 进程由其父进程利用 FORK 系统调用创建，则该进程进入 RUNNABLE 状态。<br />
+(2) 时间中断到来，RUNNABLE 状态的进程被切换到，则该进程进入 RUNNING 状态。
+(3) 时 间 中断 到来，RUNNING 状 态的进程 处理时间 片耗尽， 则该进程 进入
+RUNNABLE 状态。<br />
+(4) RUNNING 状态的进程利用 SLEEP 系统调用主动阻塞；或利用系统调用等待硬
+件 I/O，则该进程进入 BLOCKED 状态。<br />
+(5) 时间中断到来，BLOCKED 状态的进程的 SLEEP 时间片耗尽；或外部硬件中断
+表明 I/O 完成，则该进程进入 RUNNABLE 状态。<br />
+(6) RUNNING 状态的进程利用 EXIT 系统调用主动销毁，则该进程进入 DEAD 状态。</p>
+</section>
+<section id="id12">
+<h3><span class="section-number">3.3.2. </span>进程切换与堆栈切换<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<table class="docutils align-default" id="id32">
+<caption><span class="caption-text">时间中断与进程切换流程详解</span><a class="headerlink" href="#id32" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>阶段</strong></p></th>
+<th class="head"><p><strong>详细动作与状态</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>时间中断发生前</p></td>
+<td><p>P1 用户态执行
+堆栈：P1 用户栈
+时间片：还剩 5ms</p></td>
+</tr>
+<tr class="row-odd"><td><p>时间中断发生！
+<em>(硬件自动完成)</em></p></td>
+<td><ol class="arabic simple">
+<li><p>保存 PC 到 EPC/ERA 寄存器</p></li>
+<li><p>切换特权级到内核态</p></li>
+<li><p>跳转到异常向量地址</p></li>
+</ol>
+</td>
+</tr>
+<tr class="row-even"><td><p>进入异常向量
+<em>(汇编代码)</em></p></td>
+<td><ol class="arabic simple">
+<li><p>立即设置堆栈为 P1 内核栈！</p></li>
+<li><p>保存所有用户寄存器到内核栈</p></li>
+<li><p>调用 C 语言中断处理程序</p></li>
+</ol>
+</td>
+</tr>
+<tr class="row-odd"><td><p>C 语言中断处理程序</p></td>
+<td><ol class="arabic simple">
+<li><p>更新时间统计</p></li>
+<li><p>减少时间片计数：<code class="docutils literal notranslate"><span class="pre">P1.time_slice--</span></code></p></li>
+<li><p>检查时间片是否耗尽
+<code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">(P1.time_slice</span> <span class="pre">&lt;=</span> <span class="pre">0)</span> <span class="pre">{</span> <span class="pre">设置重新调度标志</span> <span class="pre">}</span></code></p></li>
+<li><p>如果需要，触发调度</p></li>
+</ol>
+</td>
+</tr>
+<tr class="row-even"><td><p>如果需要进程切换</p></td>
+<td><ol class="arabic simple">
+<li><p>保存 P1 内核上下文到 <code class="docutils literal notranslate"><span class="pre">task_struct</span></code></p></li>
+<li><p>选择 P2 为下一个进程</p></li>
+<li><p>切换到 P2 的内核栈</p></li>
+<li><p>从 P2 内核栈恢复 P2 的上下文</p></li>
+</ol>
+</td>
+</tr>
+<tr class="row-odd"><td><p>中断返回</p></td>
+<td><ol class="arabic simple">
+<li><p>从内核栈恢复用户寄存器</p></li>
+<li><p>返回到 P2 用户态执行
+堆栈：P2 用户栈</p></li>
+</ol>
+</td>
+</tr>
+</tbody>
+</table>
+<p>(1) 进程 P1 在用户态执行，中断发生后，硬件自动操作:</p>
+<ol class="arabic simple">
+<li><p>保存PC到CSR_ERA。</p></li>
+<li><p>设置CRMD.PLV=0 (进入内核态)。</p></li>
+<li><p>跳转到异常向量地址。<br />
+在异常向量中，从 P1 的用户态堆栈切换至 P1 的内核堆栈，并将 P1 的现场信息压入内核堆栈中，跳转执行时间中断处理程序，等p1的时间片用完，调度器切换到p2。<br />
+(2) 进程 P1 的处理时间片耗尽，切换至就绪状态的进程 P2，并从当前 P1 的内核
+堆栈切换至 P2 的内核堆栈。<br />
+(3) 从进程 P2 的内核堆栈中弹出 P2 的现场信息，切换至 P2 的用户态堆栈，从时
+间中断处理程序返回执行 P2。</p></li>
+</ol>
+</section>
+</section>
+<section id="id13">
+<h2><span class="section-number">3.4. </span>实验过程<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
+<section id="id14">
+<h3><span class="section-number">3.4.1. </span>进程<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<section id="sys-fork">
+<h4><span class="section-number">3.4.1.1. </span>sys_fork<a class="headerlink" href="#sys-fork" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">fork</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p">;</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">proc</span><span class="w"> </span><span class="o">*</span><span class="n">np</span><span class="p">;</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">proc</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myproc</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// Allocate process.</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">np</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">allocproc</span><span class="p">())</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Copy user memory from parent to child.</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">uvmcopy</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">pagetable</span><span class="p">,</span><span class="w"> </span><span class="n">np</span><span class="o">-&gt;</span><span class="n">pagetable</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">sz</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">freeproc</span><span class="p">(</span><span class="n">np</span><span class="p">);</span>
+<span class="w">    </span><span class="n">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">np</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">np</span><span class="o">-&gt;</span><span class="n">sz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">sz</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// copy saved user registers.</span>
+<span class="w">  </span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">-&gt;</span><span class="n">trapframe</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">trapframe</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Cause fork to return 0 in the child.</span>
+<span class="w">  </span><span class="n">np</span><span class="o">-&gt;</span><span class="n">trapframe</span><span class="o">-&gt;</span><span class="n">a0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// increment reference counts on open file descriptors.</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">NOFILE</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">ofile</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="w">      </span><span class="n">np</span><span class="o">-&gt;</span><span class="n">ofile</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">filedup</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">ofile</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">  </span><span class="n">np</span><span class="o">-&gt;</span><span class="n">cwd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">idup</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">cwd</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">safestrcpy</span><span class="p">(</span><span class="n">np</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">));</span>
+
+<span class="w">  </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="o">-&gt;</span><span class="n">pid</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">np</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">acquire</span><span class="p">(</span><span class="o">&amp;</span><span class="n">wait_lock</span><span class="p">);</span>
+<span class="w">  </span><span class="n">np</span><span class="o">-&gt;</span><span class="n">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
+<span class="w">  </span><span class="n">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">wait_lock</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">acquire</span><span class="p">(</span><span class="o">&amp;</span><span class="n">np</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+<span class="w">  </span><span class="n">np</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RUNNABLE</span><span class="p">;</span>
+<span class="w">  </span><span class="n">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">np</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">pid</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>fork 系统调用用于创建子进程，内核需要为子进程分配一块独立的内存，将父进程的地址空间、用户态堆栈完全拷贝至子进程的内存中，并为子进程分配独立的进程控制块，完成对子进程的进程控制块的设置。若子进程创建成功，则对于父进程，该系统调用的返回值为子进程的 pid，对于子进程，其返回值为 0；若子进程创建失败，该系统调用的返回值为-1。将父进程的整个用户地址空间复制到子进程，使用写时复制（Copy-on-Write）技术：实际不复制物理内存，只是复制页表条目，并标记为只读，当任一进程尝试写入时，会发生页错误，内核才会真正复制该页，如果复制失败，清理资源并返回错误,复制陷阱帧和设置返回值,遍历父进程的所有文件描述符，对每个打开的文件，调用filedup()增加引用计数，子进程共享相同的文件对象，复制当前工作目录:idup()增加目录inode的引用计数，父子进程共享相同的工作目录。设置进程关系和状态包括id，状态，进程名等。</p>
+</section>
+<section id="sys-sleep">
+<h4><span class="section-number">3.4.1.2. </span>sys_sleep<a class="headerlink" href="#sys-sleep" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">uint64</span>
+<span class="nf">sys_sleep</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="w">  </span><span class="n">uint</span><span class="w"> </span><span class="n">ticks0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">argint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">acquire</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tickslock</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ticks0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ticks</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="p">(</span><span class="n">ticks</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ticks0</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">){</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">myproc</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">killed</span><span class="p">){</span>
+<span class="w">      </span><span class="n">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tickslock</span><span class="p">);</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ticks</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tickslock</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tickslock</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>获取用户态需要休眠的时间，获取当前的ticks赋值给ticks0，当ticks - ticks0 &lt; n时，将当前状态设置为SLEEPING,调用sched，让出cpu。sleep 系统调用用于进程主动阻塞自身，内核需要将该进程由 RUNNING 状态转换为 SLEEPING 状态，设置该进程的 SLEEP 时间片，并切换运行其他 RUNNABLE 状态的进程。</p>
+</section>
+<section id="sys-exit">
+<h4><span class="section-number">3.4.1.3. </span>sys_exit<a class="headerlink" href="#sys-exit" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">uint64</span>
+<span class="nf">sys_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">argint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">exit</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c1">// not reached</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>EXIT 系统调用用于进程主动销毁自身，内核需要将该进程由 RUNNING 状态转换为 DEAD 状态，回收分配给该进程的内存、进程控制块等资源，并切换运行其他RUNNABLE 状态的进程。</p>
+</section>
+</section>
+<section id="id15">
+<h3><span class="section-number">3.4.2. </span>线程<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<section id="pthread-create">
+<h4><span class="section-number">3.4.2.1. </span>pthread_create<a class="headerlink" href="#pthread-create" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">pthread_create</span><span class="p">(</span><span class="n">uint32</span><span class="w"> </span><span class="o">*</span><span class="kr">thread</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">attr</span><span class="p">,</span>
+<span class="w">                   </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">start_routine</span><span class="p">)(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">arg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">MAX_TCB_NUM</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">STATE_DEAD</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">MAX_TCB_NUM</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"> </span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="o">*</span><span class="kr">thread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pthid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pthArg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">uint64</span><span class="p">)</span><span class="n">arg</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">joinid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">retval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">uint64</span><span class="w"> </span><span class="n">stack_top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">uint64</span><span class="p">)</span><span class="o">&amp;</span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">stack</span><span class="p">[</span><span class="n">MAX_STACK_SIZE</span><span class="p">];</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">stack_top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">stack_top</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">128</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">~</span><span class="mh">0xF</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">context</span><span class="p">.</span><span class="n">ra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">uint64</span><span class="p">)</span><span class="n">thread_wrapper</span><span class="p">;</span><span class="w">   </span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">context</span><span class="p">.</span><span class="n">sp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack_top</span><span class="p">;</span><span class="w">                </span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">context</span><span class="p">.</span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack_top</span><span class="p">;</span><span class="w">               </span>
+<span class="w">    </span>
+<span class="w">  </span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">context</span><span class="p">.</span><span class="n">s0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">uint64</span><span class="p">)</span><span class="n">start_routine</span><span class="p">;</span><span class="w">    </span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">context</span><span class="p">.</span><span class="n">s1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">uint64</span><span class="p">)</span><span class="n">arg</span><span class="p">;</span><span class="w">              </span>
+<span class="w">    </span>
+
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">context</span><span class="p">.</span><span class="n">s2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">context</span><span class="p">.</span><span class="n">s3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">context</span><span class="p">.</span><span class="n">s4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">context</span><span class="p">.</span><span class="n">s5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">context</span><span class="p">.</span><span class="n">s6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">context</span><span class="p">.</span><span class="n">s7</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">context</span><span class="p">.</span><span class="n">s8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STATE_RUNNABLE</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>找一个空闲的TCB槽位，没有空闲槽位返回-1。初始化线程控制块，设置线程栈（向下增长），这里需要注意我们要给栈预留空间，栈需要16字节对齐，并且预留一些空间给函数调用，在栈上设置返回地址当线程函数返回时调用pthread_exit，最后使用包装函数，可以省略此步骤。初始化上下文，设置返回地址指向包装函数，设置栈、帧指针。保存函数指针和参数到寄存器，并初始化其他寄存器（为0）。设置状态为STATE_RUNNABLE。</p>
+</section>
+<section id="pthread-yield">
+<h4><span class="section-number">3.4.2.2. </span>pthread_yield<a class="headerlink" href="#pthread-yield" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">pthread_yield</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">__asm__</span><span class="w"> </span><span class="n">__volatile__</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;st.d $ra, %0, 0</span><span class="se">\n\t</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;st.d $sp, %0, 8</span><span class="se">\n\t</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;st.d $s0, %0, 16</span><span class="se">\n\t</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;st.d $s1, %0, 24</span><span class="se">\n\t</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;st.d $s2, %0, 32</span><span class="se">\n\t</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;st.d $s3, %0, 40</span><span class="se">\n\t</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;st.d $s4, %0, 48</span><span class="se">\n\t</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;st.d $s5, %0, 56</span><span class="se">\n\t</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;st.d $s6, %0, 64</span><span class="se">\n\t</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;st.d $s7, %0, 72</span><span class="se">\n\t</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;st.d $s8, %0, 80</span><span class="se">\n\t</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;st.d $fp, %0, 88</span><span class="se">\n\t</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tcb</span><span class="p">[</span><span class="n">current</span><span class="p">].</span><span class="n">context</span><span class="p">)</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;memory&quot;</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">current</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STATE_RUNNABLE</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">MAX_TCB_NUM</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">current</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">MAX_TCB_NUM</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tcb</span><span class="p">[</span><span class="n">idx</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">STATE_RUNNABLE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">idx</span><span class="p">;</span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">next</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">tcb</span><span class="p">[</span><span class="n">current</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STATE_RUNNING</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">prev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current</span><span class="p">;</span>
+<span class="w">    </span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">next</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">current</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STATE_RUNNING</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">user_swtch</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tcb</span><span class="p">[</span><span class="n">prev</span><span class="p">].</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tcb</span><span class="p">[</span><span class="n">current</span><span class="p">].</span><span class="n">context</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>pthread_yield 函数会使得调用此函数的线程让出 CPU。实验要求 pthread_yield 调用成功返回 0；出错返回-1。实际测试只考虑调用成功的情况。第一步是保存现场信息，保存当前线程的完整上下文。第二步是查找一个处于 RUNNABLE 状态，把当前线程设置成 RUNNABLE，被选中进程设置为 RUNNING，然后 current 赋值为被选中线程。第三步是选择下一个可运行的线程，从当前的下一个开始查找，如果没有其他可运行线程，继续当前的线程，否则切换下一个线程。</p>
+</section>
+<section id="pthread-join">
+<h4><span class="section-number">3.4.2.3. </span>pthread_join<a class="headerlink" href="#pthread-join" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">pthread_join</span><span class="p">(</span><span class="n">uint32</span><span class="w"> </span><span class="kr">thread</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">**</span><span class="n">retval</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kr">thread</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">MAX_TCB_NUM</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="kr">thread</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tcb</span><span class="p">[</span><span class="kr">thread</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">STATE_DEAD</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">retval</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="o">*</span><span class="n">retval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">)(</span><span class="n">uint64</span><span class="p">)</span><span class="n">tcb</span><span class="p">[</span><span class="kr">thread</span><span class="p">].</span><span class="n">retval</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="kr">thread</span><span class="p">].</span><span class="n">joinid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">tcb</span><span class="p">[</span><span class="kr">thread</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">STATE_DEAD</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">pthread_yield</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">retval</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">*</span><span class="n">retval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">)(</span><span class="n">uint64</span><span class="p">)</span><span class="n">tcb</span><span class="p">[</span><span class="kr">thread</span><span class="p">].</span><span class="n">retval</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+<p>pthread_join 函数会等待 thread 指向的线程结束。首先检查参数有效性，如果线程已经结束，直接返回。否则记录当前线程正在等待这个线程，等待线程结束，获取返回值。</p>
+</section>
+<section id="pthread-exit">
+<h4><span class="section-number">3.4.2.4. </span>pthread_exit<a class="headerlink" href="#pthread-exit" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">pthread_exit</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">retval</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">current</span><span class="p">].</span><span class="n">retval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">uint64</span><span class="p">)</span><span class="n">retval</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">joiner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tcb</span><span class="p">[</span><span class="n">current</span><span class="p">].</span><span class="n">joinid</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">current</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STATE_DEAD</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tcb</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">STATE_RUNNABLE</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">tcb</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">STATE_RUNNING</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">MAX_TCB_NUM</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">current</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">tcb</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">STATE_RUNNABLE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">joiner</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">tcb</span><span class="p">[</span><span class="n">joiner</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">STATE_RUNNABLE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">joiner</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">next</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">prev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current</span><span class="p">;</span>
+<span class="w">    </span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">next</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tcb</span><span class="p">[</span><span class="n">current</span><span class="p">].</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STATE_RUNNING</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">user_swtch</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tcb</span><span class="p">[</span><span class="n">prev</span><span class="p">].</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tcb</span><span class="p">[</span><span class="n">current</span><span class="p">].</span><span class="n">context</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>pthread_exit 函数会结束当前线程。保存返回值，如果有线程等待join这个线程，需要唤醒它，标记线程为结束状态，找到下一个可运行线程，如果有线程在等待join当前线程，优先运行它，如果找不到任何可运行线程，退出进程否则切换到下一个线程。join 使用 while 等待 thread 指向的线程结束，在循环体内调度运行 thread 指向的线程，而 exit 则将当前线程置为 DEAD状态，然后调度运行一个 RUNNABLE 状态的线程。</p>
+</section>
+<section id="id16">
+<h4><span class="section-number">3.4.2.5. </span>main<a class="headerlink" href="#id16" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span>
+<span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;console&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDWR</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span>
+<span class="w">        </span><span class="n">mknod</span><span class="p">(</span><span class="s">&quot;console&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">CONSOLE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">open</span><span class="p">(</span><span class="s">&quot;console&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDWR</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">dup</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// stdout</span>
+<span class="w">    </span><span class="n">dup</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// stderr</span>
+
+<span class="c1">//lab3</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">8</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;ret:%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ret</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="p">();</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;ret:%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ret</span><span class="p">);</span>
+<span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span>
+<span class="w">        </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span>
+<span class="w">            </span><span class="n">i</span><span class="w"> </span><span class="o">--</span><span class="p">;</span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;child Process: %d, %d;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+<span class="w">            </span><span class="n">sleep</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">   </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="p">){</span>
+<span class="w">     </span><span class="n">pthread_initial</span><span class="p">();</span>
+<span class="w">     </span><span class="n">test</span><span class="p">();</span>
+<span class="w">     </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;lab3 success</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="pthreadtest">
+<h4><span class="section-number">3.4.2.6. </span>pthreadtest<a class="headerlink" href="#pthreadtest" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;kernel/param.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;kernel/types.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;kernel/stat.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;user/user.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;kernel/fs.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;kernel/fcntl.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;kernel/syscall.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;kernel/memlayout.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;kernel/loongarch.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;pthread.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;pthreadtest.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stddef.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">gi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">ping_thread_function</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">arg</span><span class="p">){</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">        </span><span class="n">gi</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Ping@%d-%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gi</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">arg</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+<span class="w">        </span><span class="n">pthread_yield</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">pthread_exit</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">pong_thread_function</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">arg</span><span class="p">){</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">        </span><span class="n">gi</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Pong@%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gi</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+<span class="w">        </span><span class="n">pthread_yield</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">pthread_exit</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">uint32</span><span class="w"> </span><span class="n">pi1_thread_ID</span><span class="p">,</span><span class="w"> </span><span class="n">pi2_thread_ID</span><span class="p">,</span><span class="w"> </span><span class="n">po_thread_ID</span><span class="p">;</span>
+<span class="w">    </span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pi1_thread_ID</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">ping_thread_function</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">);</span>
+<span class="w">    </span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pi2_thread_ID</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">ping_thread_function</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">);</span>
+<span class="w">    </span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">po_thread_ID</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">pong_thread_function</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span><span class="n">pthread_join</span><span class="p">(</span><span class="n">pi1_thread_ID</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span><span class="n">pthread_join</span><span class="p">(</span><span class="n">pi2_thread_ID</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span><span class="n">pthread_join</span><span class="p">(</span><span class="n">po_thread_ID</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">//while(1){}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>该测试是一个多线程同步测试程序，实现了经典的”Ping-Pong”线程交互模式，创建了3个线程来竞争访问和修改一个共享的全局变量 gi。<br />
+在main函数则是子进程执行循环计数，循环8次，每次睡眠4ticks，父进程初始化线程库并进行pthreadtest测试。</p>
+<p>这里需要修改Makefile文件，将pthreadtest.c链接到init.c中。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o 
+$U/_init: $U/init.o $U/pthreadtest.o $U/pthread.o $(ULIB)
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="id17">
+<h2><span class="section-number">3.5. </span>实验结果<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
+<p><img alt="这是图片" src="_images/img4.png" /></p>
+</section>
+</section>
+<section id="lab3">
+<h1><span class="section-number">4. </span>lab3<a class="headerlink" href="#lab3" title="Link to this heading"></a></h1>
+<section id="id18">
+<h2><span class="section-number">4.1. </span>实验目的<a class="headerlink" href="#id18" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>实现一个简单的生产者消费者程序。</p></li>
+<li><p>介绍基于信号量的进程同步机制。</p></li>
+</ol>
+</section>
+<section id="id19">
+<h2><span class="section-number">4.2. </span>实验内容<a class="headerlink" href="#id19" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>内核：提供基于信号量的进程同步机制，并提供系统调用 sem_init、sem_post、
+sem_wait、sem_destroy。</p></li>
+<li><p>库：对上述系统调用进行封装。</p></li>
+<li><p>用户：对上述库函数进行测试。</p></li>
+</ol>
+</section>
+<section id="id20">
+<h2><span class="section-number">4.3. </span>实验过程<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
+<section id="id21">
+<h3><span class="section-number">4.3.1. </span>内核态<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">semsinit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">initlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">semslock</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sems&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">MAX_SEM_NUM</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">initlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sem</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sem&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sem</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">      </span><span class="c1">// 标记为无效</span>
+<span class="w">        </span><span class="n">sem</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="n">sem</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">waiting</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>新增seminit函数用来初始化信号量。</p>
+</section>
+<section id="id22">
+<h3><span class="section-number">4.3.2. </span>用户态<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<section id="id23">
+<h4><span class="section-number">4.3.2.1. </span>新增系统调用步骤<a class="headerlink" href="#id23" title="Link to this heading"></a></h4>
+<p>以sys_seminit系统调用为例:</p>
+<section id="id24">
+<h5><span class="section-number">4.3.2.1.1. </span>增加用户入口<a class="headerlink" href="#id24" title="Link to this heading"></a></h5>
+<p>在user/usys.S中添加：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.global seminit
+seminit:
+ li.d $a7, SYS_seminit
+ syscall 0
+ jirl $zero, $ra, 0
+</pre></div>
+</div>
+<p>修改user.h
+在//system calls注释下添加函数原型声明：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">seminit</span><span class="p">(</span><span class="nb">int</span> <span class="n">value</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="id25">
+<h5><span class="section-number">4.3.2.1.2. </span>增加系统调用号<a class="headerlink" href="#id25" title="Link to this heading"></a></h5>
+<p>在 kernel/syscall.h 中。我们可以在 SYS_close 的后面，新加入一行：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define SYS_seminit    23</span>
+</pre></div>
+</div>
+</section>
+<section id="syscall-c">
+<h5><span class="section-number">4.3.2.1.3. </span>修改 syscall.c 中的跳转表<a class="headerlink" href="#syscall-c" title="Link to this heading"></a></h5>
+<p>在 kernel/syscall.c中。在[SYS_close]   sys_close后添加一行：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">SYS_seminit</span><span class="p">]</span>    <span class="n">sys_seminit</span><span class="p">,</span>
+</pre></div>
+</div>
+</section>
+<section id="sys-seminit">
+<h5><span class="section-number">4.3.2.1.4. </span>实现 sys_seminit()<a class="headerlink" href="#sys-seminit" title="Link to this heading"></a></h5>
+<p>见之后的小结。</p>
+</section>
+</section>
+<section id="id26">
+<h4><span class="section-number">4.3.2.2. </span>sys_seminit 系统调用<a class="headerlink" href="#id26" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">uint64</span>
+<span class="nf">sys_seminit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">semid</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">argint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">SEM_VALUE_MAX</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">semid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">semalloc</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">semid</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span>
+<span class="nf">semalloc</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">acquire</span><span class="p">(</span><span class="o">&amp;</span><span class="n">semslock</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">MAX_SEM_NUM</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">sem</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">valid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">sem</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">sem</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">            </span><span class="n">sem</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">waiting</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">            </span><span class="n">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">semslock</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">semslock</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>sys_seminit 系统调用用于分配一个信号量，将valid设为1代表已使用，通过argint得到需要赋予的value值，初始化等待队列计数器。</p>
+</section>
+<section id="sys-sempost">
+<h4><span class="section-number">4.3.2.3. </span>sys_sempost 系统调用<a class="headerlink" href="#sys-sempost" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">uint64</span>
+<span class="nf">sys_sempost</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">semid</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">argint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">semid</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">semid</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">semid</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">MAX_SEM_NUM</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">sempost</span><span class="p">(</span><span class="n">semid</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">sempost</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">semid</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">semaphore</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">proc</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">semid</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">semid</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">MAX_SEM_NUM</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sem</span><span class="p">[</span><span class="n">semid</span><span class="p">];</span>
+<span class="w">    </span><span class="n">acquire</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">value</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">waiting</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">waiting</span><span class="p">;</span>
+<span class="w">            </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">waiting</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+<span class="w">            </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span>
+<span class="w">            </span><span class="n">wakeup</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>sem_post 系统调用对应信号量的 V 操作（释放资源/增加信号量），其使得 sem 指向的信号量的 value 加一，若 value 取值不大于 0，则释放一个阻塞在该信号量上进程（即将该进程设置为就绪态），若操作成功则返回 0，否则返回-1。
+sempost 首先检查参数对应的信号量，否则将value 加一，若 value&lt;=0，唤醒等待队列中的一个进程：waiting != 0,移除队列头部，清空next指针，唤醒进程。</p>
+</section>
+<section id="sys-semwait">
+<h4><span class="section-number">4.3.2.4. </span>sys_semwait 系统调用<a class="headerlink" href="#sys-semwait" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">uint64</span>
+<span class="nf">sys_semwait</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">semid</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">argint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">semid</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">semid</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">semid</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">MAX_SEM_NUM</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">semwait</span><span class="p">(</span><span class="n">semid</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">semwait</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">semid</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">semaphore</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">proc</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myproc</span><span class="p">();</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">semid</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">semid</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">MAX_SEM_NUM</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sem</span><span class="p">[</span><span class="n">semid</span><span class="p">];</span>
+<span class="w">    </span><span class="n">acquire</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">value</span><span class="o">--</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">chan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="w">  </span>
+<span class="w">        </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">waiting</span><span class="p">;</span>
+<span class="w">        </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">waiting</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
+<span class="w">        </span><span class="n">sleep</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+<p>sem_wait 系统调用对应信号量的 P 操作（获取资源/减少信号量），其使得 sem 指向的信号量的 value 减一，若 value 取值小于 0，则阻塞自身，否则进程继续执行，若操作成功则返回0，否则返回-1。
+sem_wait 同样检查 state，然后将 value 减一，若 value&lt;0，说明进程应该被阻塞，
+设置睡眠通道，睡眠，被唤醒后，从等待队列中移除。（注意：这里不需要手动移除，由sempost负责）</p>
+</section>
+<section id="sys-semdestroy">
+<h4><span class="section-number">4.3.2.5. </span>sys_semdestroy 系统调用<a class="headerlink" href="#sys-semdestroy" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">uint64</span>
+<span class="nf">sys_semdestroy</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">semid</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">argint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">semid</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">semfree</span><span class="p">(</span><span class="n">semid</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span>
+<span class="nf">semfree</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">semid</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">semid</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">semid</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">MAX_SEM_NUM</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">acquire</span><span class="p">(</span><span class="o">&amp;</span><span class="n">semslock</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">sem</span><span class="p">[</span><span class="n">semid</span><span class="p">].</span><span class="n">valid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">semslock</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">sem</span><span class="p">[</span><span class="n">semid</span><span class="p">].</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">semslock</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>sem_destroy 系统调用用于销毁 sem 指向的信号量，销毁成功则返回 0，否则返
+回-1，若尚有进程阻塞在该信号量上，可带来未知错误。
+sem_destroy 直接将信号量的 state 清零，并触发时钟中断重新调度即可。</p>
+</section>
+</section>
+<section id="id27">
+<h3><span class="section-number">4.3.3. </span>信号量解决生产者消费者问题<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
+<section id="id28">
+<h4><span class="section-number">4.3.3.1. </span>main 函数<a class="headerlink" href="#id28" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span>
+<span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;console&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDWR</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span>
+<span class="w">        </span><span class="n">mknod</span><span class="p">(</span><span class="s">&quot;console&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">CONSOLE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">open</span><span class="p">(</span><span class="s">&quot;console&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDWR</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">dup</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// stdout</span>
+<span class="w">    </span><span class="n">dup</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// stderr</span>
+<span class="w">   </span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">semid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">pid</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">//sem_t sem;</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Father Process: Semaphore Initializing.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">semid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">seminit</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">//printf(&quot;%d\n&quot;,semid);</span>
+<span class="w">    </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">i</span><span class="w"> </span><span class="o">--</span><span class="p">;</span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Child Process: Semaphore Waiting.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">semwait</span><span class="p">(</span><span class="n">semid</span><span class="p">);</span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Child Process: In Critical Area.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">            </span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Child Process: Semaphore Destroying.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">semdestroy</span><span class="p">(</span><span class="n">semid</span><span class="p">);</span>
+<span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">i</span><span class="w"> </span><span class="o">--</span><span class="p">;</span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Father Process: Sleeping.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">sleep</span><span class="p">(</span><span class="mi">128</span><span class="p">);</span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Father Process: Semaphore Posting.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">sempost</span><span class="p">(</span><span class="n">semid</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Father Process: Semaphore Destroying.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">semdestroy</span><span class="p">(</span><span class="n">semid</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">//exit();</span>
+<span class="w">    </span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="o">=</span><span class="mi">-1</span><span class="p">;</span>
+<span class="n">mutex</span><span class="o">=</span><span class="n">seminit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">buffer</span><span class="o">=</span><span class="n">seminit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">   </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// printf(&quot;in re\n&quot;);</span>
+<span class="w">      </span><span class="n">ret</span><span class="o">=</span><span class="n">fork</span><span class="p">();</span>
+<span class="w">      </span><span class="c1">//test1();     </span>
+<span class="w">     </span><span class="c1">// printf(&quot;i=%d\n&quot;,i);</span>
+<span class="w">     </span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">){</span>
+<span class="w">                </span><span class="n">producer</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span><span class="p">{</span>
+<span class="w">                </span><span class="n">consumer</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span>
+<span class="w">            </span><span class="c1">//exit(1);</span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="c1">//while(1);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">semdestroy</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+<span class="w">    </span><span class="n">semdestroy</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+
+
+
+<span class="w">   </span>
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>main 函数首先对系统调用和库函数的测试，其次，需要准备两个信号量 mutex(用于互斥)和 buffer(用于生产者消费者同步)，value 分别为 1 和 0，然后循环 fork 出 6 个子进程，根据 fork 的返回值，若为 0 说明是子进程，调用相应的生产者消费者函数，并跳出循环，否则是父进程，继续循环。</p>
+</section>
+<section id="id29">
+<h4><span class="section-number">4.3.3.2. </span>生产者进程<a class="headerlink" href="#id29" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">producer</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">arg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getpid</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sleep</span><span class="p">(</span><span class="mi">64</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;pid %d, producer %d, produce, product %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;pid %d, producer %d, try lock, product %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">);</span>
+<span class="w">        </span><span class="n">semwait</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;pid %d, producer %d, locked</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sempost</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;pid %d, producer %d, unlock</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">);</span>
+<span class="w">       </span><span class="n">sempost</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+<p>生产者循环生产，生产过程用 sleep(64)模拟，生产完成打印 produce 信息，接着
+尝试获取 mutex 实现互斥访问，最后对 buffer 执行 V 操作表示 buffer 内已经有
+产品了。</p>
+</section>
+<section id="id30">
+<h4><span class="section-number">4.3.3.3. </span>消费者进程<a class="headerlink" href="#id30" title="Link to this heading"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">consumer</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">arg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getpid</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;pid %d, consumer %d, try consume, product %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">);</span>
+<span class="w">        </span><span class="n">semwait</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;pid %d, consumer %d, try lock, product %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">);</span>
+<span class="w">        </span><span class="n">semwait</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;pid %d, consumer %d, locked</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sempost</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;pid %d, consumer %d, unlock</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sleep</span><span class="p">(</span><span class="mi">64</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;pid %d, consumer %d, consumed, product %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>消费者循环消费，打印一条 try consume 信息，并对 buffer 执行 P 操作，此时若
+buffer 为空则被阻塞，接着获取 mutex 访问临界区，最后用 sleep(64)模拟消费过
+程，在完成消费后打印 consumed 信息。</p>
+</section>
+</section>
+</section>
+<section id="id31">
+<h2><span class="section-number">4.4. </span>实验结果<a class="headerlink" href="#id31" title="Link to this heading"></a></h2>
+<p>(1) 用户程序测试
+由框架代码给出的对系统调用和库函数的测试部分的实验结果如下
+<img alt="这是图片" src="_images/img5.png" /><br />
+对执行过程的分析如下</p>
+<ol class="arabic simple">
+<li><p>父进程初始化信号量，fork 出子进程，打印 sleeping 后便去睡眠。</p></li>
+<li><p>由于信号量的值为 2，子进程可以进入两次关键区，在第三次时被阻塞。</p></li>
+<li><p>父进程苏醒，释放信号量，又去睡眠</p></li>
+<li><p>被阻塞的子进程释放，再次进入关键区，又被阻塞。</p></li>
+<li><p>同 4。</p></li>
+<li><p>被阻塞的子进程释放，销毁信号量，退出。</p></li>
+<li><p>只有父进程运行，最终销毁信号量。</p></li>
+</ol>
+<p>(2) 生产者消费者
+生产者消费者进程的执行结果较长，截取部分<br />
+<img alt="这是图片" src="_images/img6.png" /><br />
+对执行结果分析如下</p>
+<ol class="arabic simple">
+<li><p>生产者 1、2 均执行 sleep 模拟生产过程，消费者 1、2、3、4 执行 try consume
+但由于 buffer 为空被阻塞。</p></li>
+<li><p>生产者 1、2 各完成生产一个产品。</p></li>
+<li><p>消费者 1、2 各开始消费一个产品。</p></li>
+<li><p>生产者 1、2 各完成生产一个产品。</p></li>
+<li><p>消费者 1、2 各完成消费第一个产品，尝试消费第二个产品被阻塞。</p></li>
+<li><p>消费者 3、4 各开始消费一个产品。</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+    <a href="README.html" class="btn btn-neutral float-left" title="1. 项目介绍" accesskey="p"
+      rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+  </div>
+
+  <hr />
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022-2024, 奕行智能科技有限公司。
+      <span class="lastupdated">最后更新于 2026年1月23日 16:51:23.
+      </span>
+
+      <!-- 
+      <span class="footer-aside">
+        <a href="./NJU-OS移植.pdf" class="fa fa-file-pdf-o">&nbsp下载 PDF</a>
+      </span>
+       -->
+    </p>
+  </div> 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>

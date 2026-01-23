@@ -1,0 +1,5 @@
+[console_scripts]
+evas = sphinx_evas_theme.quickstart:main
+
+[sphinx.html_themes]
+sphinx_evas_theme = sphinx_evas_theme

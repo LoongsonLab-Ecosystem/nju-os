@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyST Markdown 语法入门 &mdash; NJU-OS移植 V1.0 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=b01b2dd9" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=3f0bcac8"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="_static/togglebutton.js?v=1ae7504c"></script>
+        <script src="_static/translations.js?v=beaddf03"></script>
+        <script src="_static/design-tabs.js?v=f930bc37"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <img src="_static/logo.svg" class="logo" alt="Logo"/>
+          <a href="index.html" class="icon icon-home">
+            NJU-OS移植
+          </a>
+              <div class="version">
+                V1.0
+              </div>
+<div role="search">
+  <form id="evas-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html">1. 项目介绍</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="README.html#id2">1.1. 环境准备</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#nju-os">1.2. 编译NJU-OS内核</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nju.html">2. lab1</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id1">2.1. 实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id2">2.2. 实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id3">2.3. 实验过程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id4">2.3.1. 内核态初始化</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#kinit">2.3.1.1. kinit()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#vminit">2.3.1.2. vminit()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#trapinit">2.3.1.3. trapinit()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#apic-init">2.3.1.4. apic_init()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#extioi-init">2.3.1.5. extioi_init()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#binit">2.3.1.6. binit()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#userinit">2.3.1.7. userinit()</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id5">2.3.2. 内核态向用户态跳转</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id6">2.3.3. 用户态</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#printf">2.3.3.1. printf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#main">2.3.3.2. main</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id7">2.4. 实验结果</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nju.html#lab2">3. lab2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id8">3.1. 实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id9">3.2. 实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id10">3.3. 背景知识</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id11">3.3.1. 进程与线程</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id12">3.3.2. 进程切换与堆栈切换</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id13">3.4. 实验过程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id14">3.4.1. 进程</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#sys-fork">3.4.1.1. sys_fork</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#sys-sleep">3.4.1.2. sys_sleep</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#sys-exit">3.4.1.3. sys_exit</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id15">3.4.2. 线程</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#pthread-create">3.4.2.1. pthread_create</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#pthread-yield">3.4.2.2. pthread_yield</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#pthread-join">3.4.2.3. pthread_join</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#pthread-exit">3.4.2.4. pthread_exit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#id16">3.4.2.5. main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#pthreadtest">3.4.2.6. pthreadtest</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id17">3.5. 实验结果</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nju.html#lab3">4. lab3</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id18">4.1. 实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id19">4.2. 实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id20">4.3. 实验过程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id21">4.3.1. 内核态</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id22">4.3.2. 用户态</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#id23">4.3.2.1. 新增系统调用步骤</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#id26">4.3.2.2. sys_seminit 系统调用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#sys-sempost">4.3.2.3. sys_sempost 系统调用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#sys-semwait">4.3.2.4. sys_semwait 系统调用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#sys-semdestroy">4.3.2.5. sys_semdestroy 系统调用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id27">4.3.3. 信号量解决生产者消费者问题</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#id28">4.3.3.1. main 函数</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#id29">4.3.3.2. 生产者进程</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#id30">4.3.3.3. 消费者进程</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id31">4.4. 实验结果</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NJU-OS移植</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">MyST Markdown 语法入门</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="myst-markdown">
+<h1>MyST Markdown 语法入门<a class="headerlink" href="#myst-markdown" title="Link to this heading"></a></h1>
+<p>MyST Markdown, MyST（全称 Markedly Structured Text）专为 Sphinx 项目使用而设计的 Markdown 风格。 它是 CommonMark Markdown 和一些额外的语法片段的组合，以支持 Sphinx 的功能，因此您可以用纯 Markdown 编写 Sphinx 文档。</p>
+<p><a class="reference external" href="https://myst-parser.readthedocs.io">MyST-Parser官网语法教程</a></p>
+<section id="id1">
+<h2>提示框<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>警告提示框（Admonition）突出显示与页面叙述稍有不同的特定文本块，例如注释或警告。</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>:::{tip}
+给读者一些有用的提示吧！
+:::
+
+:::{note}
+这是一个笔记
+:::
+
+
+:::{caution}
+这是一个警告
+:::
+
+:::{error}
+这是一个错误
+:::
+</pre></div>
+</div>
+<p>显示效果</p>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>给读者一些有用的提示吧！</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>这是一个笔记</p>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">小心</p>
+<p>这是一个警告</p>
+</div>
+<div class="admonition error">
+<p class="admonition-title">错误</p>
+<p>这是一个错误</p>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h2>标题<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>为了兼容考虑，用一个空格在 <code class="docutils literal notranslate"><span class="pre">#</span></code> 和标题之间进行分隔。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 一级标题</span>
+
+<span class="c1">## 二级标题</span>
+
+<span class="c1">### 三级标题</span>
+
+<span class="c1">#### 四级标题</span>
+
+<span class="c1">##### 五级标题</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id3">
+<h2>有序列表<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>要创建有序列表，请在每个列表项前添加数字并紧跟一个英文句点。<br />
+数字不必按数学顺序排列，但是列表应当以数字 1 起始。</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="k">1.</span> 条目1
+<span class="k">2.</span> 条目2
+<span class="k">3.</span> 条目3
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>缩进条目
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>缩进条目
+</pre></div>
+</div>
+<p>显示效果</p>
+<ol class="arabic simple">
+<li><p>条目1</p></li>
+<li><p>条目2</p></li>
+<li><p>条目3</p>
+<ul class="simple">
+<li><p>缩进条目</p></li>
+<li><p>缩进条目</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="id4">
+<h2>无序列表<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>要创建无序列表，请在每个列表项前面添加破折号 (-)、星号 (*) 或加号 (+) 。缩进一个或多个列表项可创建嵌套列表。</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="k">-</span><span class="w"> </span>条目1
+<span class="k">-</span><span class="w"> </span>条目2
+<span class="k">-</span><span class="w"> </span>条目3
+<span class="k">-</span><span class="w"> </span>条目4
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>缩进条目
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>缩进条目
+
+<span class="k">*</span><span class="w"> </span>条目1
+<span class="k">*</span><span class="w"> </span>条目2
+<span class="k">*</span><span class="w"> </span>条目3
+<span class="k">*</span><span class="w"> </span>条目4
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>缩进条目
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>缩进条目
+
++ 条目1
++ 条目2
++ 条目3
++ 条目4
+    + 缩进条目
+    + 缩进条目
+</pre></div>
+</div>
+<p>显示效果</p>
+<ul class="simple">
+<li><p>条目1</p></li>
+<li><p>条目2</p></li>
+<li><p>条目3</p></li>
+<li><p>条目4</p>
+<ul>
+<li><p>缩进条目</p></li>
+<li><p>缩进条目</p></li>
+</ul>
+</li>
+</ul>
+<ul class="simple">
+<li><p>条目1</p></li>
+<li><p>条目2</p></li>
+<li><p>条目3</p></li>
+<li><p>条目4</p>
+<ul>
+<li><p>缩进条目</p></li>
+<li><p>缩进条目</p></li>
+</ul>
+</li>
+</ul>
+<ul class="simple">
+<li><p>条目1</p></li>
+<li><p>条目2</p></li>
+<li><p>条目3</p></li>
+<li><p>条目4</p>
+<ul>
+<li><p>缩进条目</p></li>
+<li><p>缩进条目</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h2>文本换行<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p><strong>Markdown中在段落前不要用空格（spaces）或制表符（ tabs）缩进段落。</strong></p>
+<section id="id6">
+<h3>无效换行<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>在一行结尾没有加空格时，后一行内容会自动追加显示在前一行</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>This is the first line.  
+And this is the second line.
+</pre></div>
+</div>
+<p>显示效果</p>
+<p>This is the first line.
+And this is the second line.</p>
+</section>
+<section id="id7">
+<h3>段内换行<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>要在没有段落的情况下换行，使用<strong>两个或多个空格</strong>进行换行，称为 结尾空格（trailing whitespace)</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>This is the first line.  
+And this is the second line.
+</pre></div>
+</div>
+<p>显示效果</p>
+<p>This is the first line.</p>
+<p>And this is the second line.</p>
+</section>
+<section id="id8">
+<h3>新段落<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>两行之间<strong>间隔一行</strong>，即可新增段落</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>This is the first line.
+
+And this is the second line.
+</pre></div>
+</div>
+<p>显示效果</p>
+<p>This is the first line.</p>
+<p>And this is the second line.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id9">
+<h2>字体样式<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<p>要加粗文本，在短语前后各添加<strong>两个</strong>星号<code class="docutils literal notranslate"><span class="pre">*</span></code>或下划线<code class="docutils literal notranslate"><span class="pre">_</span></code><br />
+要斜体文本，在短语前后各添加<strong>一个</strong>星号<code class="docutils literal notranslate"><span class="pre">*</span></code>或下划线<code class="docutils literal notranslate"><span class="pre">_</span></code><br />
+要同时用粗体和斜体突出显示文本，在短语前后各添加<strong>三个</strong>星号<code class="docutils literal notranslate"><span class="pre">*</span></code>或下划线<code class="docutils literal notranslate"><span class="pre">_</span></code><br />
+删除线在PDF中不可用</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="ge">*斜体*</span> 
+
+<span class="ge">_斜体_</span>
+
+<span class="gs">**粗体**</span>
+
+<span class="gs">__粗体__</span>
+
+***粗体+斜体***
+
+___粗体+斜体___
+
+
+H{sub}`2`O, and 4{sup}`th` of July
+</pre></div>
+</div>
+<p>显示效果</p>
+<p><em>斜体</em></p>
+<p><em>斜体</em></p>
+<p><strong>粗体</strong></p>
+<p><strong>粗体</strong></p>
+<p><em><strong>粗体+斜体</strong></em></p>
+<p><em><strong>粗体+斜体</strong></em></p>
+<p>H<sub>2</sub>O, and 4<sup>th</sup> of July</p>
+</section>
+<hr class="docutils" />
+<section id="id10">
+<h2>单行块引用<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<p>要创建块引用，请在段落前添加一个<code class="docutils literal notranslate"><span class="pre">&gt;</span></code>符号。</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="k">&gt; </span><span class="ge">这是一个引用块</span>
+</pre></div>
+</div>
+<p>显示效果</p>
+<blockquote>
+<div><p>这是一个引用块</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="id11">
+<h2>多行块引用<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<p>块引用可以包含多个段落。为段落之间的空白行添加一个 <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>符号。</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="k">&gt; </span><span class="ge">呼啸的秋风让人无限忧愁，进也忧愁，退也忧愁。</span>
+&gt; 
+<span class="k">&gt; </span><span class="ge">异域戍边的人，哪个不陷入悲愁中？真是愁白了头啊。</span>
+&gt; 
+<span class="k">&gt; </span><span class="ge">胡人之处多狂风，树木萧瑟干枯。</span>
+</pre></div>
+</div>
+<p>显示效果</p>
+<blockquote>
+<div><p>呼啸的秋风让人无限忧愁，进也忧愁，退也忧愁。</p>
+<p>异域戍边的人，哪个不陷入悲愁中？真是愁白了头啊。</p>
+<p>胡人之处多狂风，树木萧瑟干枯。</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="id12">
+<h2>代码块<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+<p>在代码前和后的行上使用三个反引号<code class="docutils literal notranslate"><span class="pre">```</span></code>或三个波浪号<code class="docutils literal notranslate"><span class="pre">~~~</span></code>
+在代码块之前的反引号旁边指定一种语言，即可实现<strong>语法高亮</strong></p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="sb">    ```python</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+<span class="sb">    ```</span>
+
+    ~~~ json
+    {
+        &quot;firstName&quot;: &quot;John&quot;,
+        &quot;lastName&quot;: &quot;Smith&quot;,
+        &quot;age&quot;: 25
+    }
+    ~~~
+</pre></div>
+</div>
+<p>显示效果</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;firstName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;John&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;lastName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Smith&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;age&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id13">
+<h2>文件中的代码<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
+<p>可以使用 literalinclude 指令从文件中包含更长的代码：<br />
+<strong>注意:</strong> ```和{literalinclude}之间不能有空格</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>    ```{literalinclude} quickstart.py
+    ```
+</pre></div>
+</div>
+<p>显示效果</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># coding=utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">EVAS Docs Sphinx theme quick-start program</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sphinx.util.console</span><span class="w"> </span><span class="kn">import</span> <span class="n">bold</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sphinx.util.fileutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">copy_asset</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">bold</span><span class="p">(</span><span class="s1">&#39;欢迎使用 EVAS Docs Sphinx 主题 </span><span class="si">%s</span><span class="s1"> 初始化程序.&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="n">__version__</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;********正在创建主题模板文件到当前目录********&quot;</span><span class="p">)</span>
+    <span class="n">source_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="s1">&#39;templates&#39;</span><span class="p">)</span>
+    <span class="n">dest_dir</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
+    <span class="n">copy_asset</span><span class="p">(</span><span class="n">source_dir</span><span class="p">,</span> <span class="n">dest_dir</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;_build&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;source/_static&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;source/_templates&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s1">&#39;source/__pycache__&#39;</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;********创建完成，请使用make all构建文档********&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id14">
+<h2>数学公式<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
+<p>math角色和指令分别用于定义内联数学和块数学。<br />
+<strong>注意:</strong> ```和{math}之间不能有空格</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>    ```{math}
+    :label: mymath
+    (a + b)^2 = a^2 + 2ab + b^2
+
+    (a + b)^2  &amp;=  (a + b)(a + b) \\
+            &amp;=  a^2 + 2ab + b^2
+    ```
+</pre></div>
+</div>
+<p>显示效果</p>
+<div class="math notranslate nohighlight" id="equation-mymath">
+<span class="eqno">(1)<a class="headerlink" href="#equation-mymath" title="Link to this equation"></a></span>\[ \begin{align}\begin{aligned}(a + b)^2 = a^2 + 2ab + b^2\\\begin{split}(a + b)^2  &amp;=  (a + b)(a + b) \\
+           &amp;=  a^2 + 2ab + b^2\end{split}\end{aligned}\end{align} \]</div>
+</section>
+<hr class="docutils" />
+<section id="id15">
+<h2>脚注<a class="headerlink" href="#id15" title="Link to this heading"></a></h2>
+<p>脚注使用 pandoc 规范。它们的标签以 ^ 开头，然后可以是任何字母数字字符串（无空格），不区分大小写。</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="k">-</span><span class="w"> </span>This is a manually-numbered footnote reference.[^3]
+<span class="k">-</span><span class="w"> </span>This is an auto-numbered footnote reference.[^myref]
+
+[<span class="nl">^myref</span>]: <span class="na">This is an auto-numbered footnote definition.</span>
+[<span class="nl">^3</span>]: <span class="na">This is a manually-numbered footnote definition.</span>
+</pre></div>
+</div>
+<p>显示效果</p>
+<ul class="simple">
+<li><p>This is a manually-numbered footnote reference.<a class="footnote-reference brackets" href="#id18" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></li>
+<li><p>This is an auto-numbered footnote reference.<a class="footnote-reference brackets" href="#myref" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="id19">
+<h2>嵌入图像<a class="headerlink" href="#id19" title="Link to this heading"></a></h2>
+<p>要添加图像，请使用感叹号 (!), 然后在方括号增加替代文本，图片链接放在圆括号里，括号里的链接后可以增加一个可选的图片标题文本。</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>![<span class="nt">这是图片</span>](<span class="na">_static/philly-magic-garden.jpg &quot;Magic Gardens&quot;</span>)
+
+    ```{image} _static/philly-magic-garden.jpg
+    :alt: philly magic garden
+    :class: bg-primary
+    :scale: 50 %
+    :align: center
+    ```
+</pre></div>
+</div>
+<p>显示效果</p>
+<p><img alt="这是图片" src="_images/philly-magic-garden.jpg" /></p>
+<a class="bg-primary reference internal image-reference" href="_images/philly-magic-garden.jpg"><img alt="philly magic garden" class="bg-primary align-center" src="_images/philly-magic-garden.jpg" style="width: 423.5px; height: 317.5px;" />
+</a>
+</section>
+<hr class="docutils" />
+<section id="id20">
+<h2>超链接<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
+<p>超链接Markdown语法代码：<code class="docutils literal notranslate"><span class="pre">[超链接显示名](超链接地址</span> <span class="pre">&quot;超链接title&quot;)</span></code></p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>这是一个链接 [<span class="nt">Markdown语法</span>](<span class="na">https://markdown.com.cn</span>)
+</pre></div>
+</div>
+<p>显示效果</p>
+<p>这是一个链接 <a class="reference external" href="https://markdown.com.cn">Markdown语法</a></p>
+</section>
+<hr class="docutils" />
+<section id="id21">
+<h2>表格<a class="headerlink" href="#id21" title="Link to this heading"></a></h2>
+<p>表格必须使用MyST Markdown格式，否则PDF无法显示。</p>
+<p>list-table 指令用于根据统一的两级项目符号列表中的数据创建表格。 “统一”是指每个子列表（二级列表）必须包含相同数量的列表项。</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>:::{list-table} 表格标题
+:widths: 15 10 30
+:header-rows: 1
+
+<span class="k">*</span><span class="w"> </span>  - <span class="gs">**Treat**</span>
+<span class="w">    </span><span class="k">-</span><span class="w"> </span><span class="gs">**Quantity**</span>
+<span class="w">    </span><span class="k">-</span><span class="w"> </span><span class="gs">**Description**</span>
+<span class="k">*</span><span class="w"> </span>  - Albatross
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>2.99
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>On a stick!
+<span class="k">*</span><span class="w"> </span>  - Crunchy Frog
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>1.49
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>If we took the bones out, it wouldn&#39;t be
+ crunchy, now would it?
+<span class="k">*</span><span class="w"> </span>  - Gannet Ripple
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>1.99
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>On a stick!
+:::
+</pre></div>
+</div>
+<p>显示效果</p>
+<table class="docutils align-default" id="id22">
+<caption><span class="caption-text">表格标题</span><a class="headerlink" href="#id22" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 27.3%" />
+<col style="width: 18.2%" />
+<col style="width: 54.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Treat</strong></p></th>
+<th class="head"><p><strong>Quantity</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Albatross</p></td>
+<td><p>2.99</p></td>
+<td><p>On a stick!</p></td>
+</tr>
+<tr class="row-odd"><td><p>Crunchy Frog</p></td>
+<td><p>1.49</p></td>
+<td><p>If we took the bones out, it wouldn’t be
+crunchy, now would it?</p></td>
+</tr>
+<tr class="row-even"><td><p>Gannet Ripple</p></td>
+<td><p>1.99</p></td>
+<td><p>On a stick!</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="myref" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id17">1</a><span class="fn-bracket">]</span></span>
+<p>This is an auto-numbered footnote definition.</p>
+</aside>
+<aside class="footnote brackets" id="id18" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id16">3</a><span class="fn-bracket">]</span></span>
+<p>This is a manually-numbered footnote definition.</p>
+</aside>
+</aside>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr />
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022-2024, 奕行智能科技有限公司。
+      <span class="lastupdated">最后更新于 2026年1月23日 16:51:23.
+      </span>
+
+      <!-- 
+      <span class="footer-aside">
+        <a href="./NJU-OS移植.pdf" class="fa fa-file-pdf-o">&nbsp下载 PDF</a>
+      </span>
+       -->
+    </p>
+  </div> 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>

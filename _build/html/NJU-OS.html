@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; NJU-OS移植 V1.0 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=b01b2dd9" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=3f0bcac8"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="_static/togglebutton.js?v=1ae7504c"></script>
+        <script src="_static/translations.js?v=beaddf03"></script>
+        <script src="_static/design-tabs.js?v=f930bc37"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <img src="_static/logo.svg" class="logo" alt="Logo"/>
+          <a href="index.html" class="icon icon-home">
+            NJU-OS移植
+          </a>
+              <div class="version">
+                V1.0
+              </div>
+<div role="search">
+  <form id="evas-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html">1. 项目介绍</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="README.html#id2">1.1. 项目参考</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#id3">1.2. 效果预览</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#id4">1.3. 环境准备</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#sphinx-evas-theme">1.4. 如何安装Sphinx EVAS Theme</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="README.html#venv-python">1.4.1. 在venv python虚拟环境下安装</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#id5">1.5. 如何使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="README.html#sphinx">1.5.1. 本项目引入了哪些Sphinx扩展？</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README.html#id6">1.5.2. 文档编写语言</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#id7">1.6. Sphinx EVAS Theme 目录结构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#id8">1.7. 项目模板目录结构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#live-preview">1.8. Live Preview 实时在线预览</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="myst_markdown.html">2. MyST Markdown 语法入门</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id1">2.1. 提示框</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id2">2.2. 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id3">2.3. 有序列表</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id4">2.4. 无序列表</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id5">2.5. 文本换行</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="myst_markdown.html#id6">2.5.1. 无效换行</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myst_markdown.html#id7">2.5.2. 段内换行</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myst_markdown.html#id8">2.5.3. 新段落</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id9">2.6. 字体样式</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id10">2.7. 单行块引用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id11">2.8. 多行块引用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id12">2.9. 代码块</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id13">2.10. 文件中的代码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id14">2.11. 数学公式</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id15">2.12. 脚注</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id19">2.13. 嵌入图像</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id20">2.14. 超链接</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myst_markdown.html#id21">2.15. 表格</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nju.html">3. lab1</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id1">3.1. 实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id2">3.2. 实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id3">3.3. 实验过程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id4">3.3.1. 内核态初始化</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#kinit">3.3.1.1. kinit()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#vminit">3.3.1.2. vminit()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#trapinit">3.3.1.3. trapinit()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#apic-init">3.3.1.4. apic_init()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#extioi-init">3.3.1.5. extioi_init()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#binit">3.3.1.6. binit()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#userinit">3.3.1.7. userinit()</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id5">3.3.2. 内核态向用户态跳转</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id6">3.3.3. 用户态</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#printf">3.3.3.1. printf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#main">3.3.3.2. main</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id7">3.4. 实验结果</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nju.html#lab2">4. lab2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id8">4.1. 实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id9">4.2. 实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id10">4.3. 背景知识</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id11">4.3.1. 进程与线程</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id12">4.3.2. 进程切换与堆栈切换</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id13">4.4. 实验过程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id14">4.4.1. 进程</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#sys-fork">4.4.1.1. sys_fork</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#sys-sleep">4.4.1.2. sys_sleep</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#sys-exit">4.4.1.3. sys_exit</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id15">4.4.2. 线程</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#pthread-create">4.4.2.1. pthread_create</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#pthread-yeild">4.4.2.2. pthread_yeild</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#pthread-join">4.4.2.3. pthread_join</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#pthread-exit">4.4.2.4. pthread_exit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#id16">4.4.2.5. main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#pthreadtest">4.4.2.6. pthreadtest</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id17">4.5. 实验结果</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nju.html#lab3">5. lab3</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id18">5.1. 实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id19">5.2. 实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id20">5.3. 实验过程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id21">5.3.1. 内核态</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id22">5.3.2. 用户态</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#id23">5.3.2.1. 新增系统调用步骤</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#id26">5.3.2.2. sys_seminit 系统调用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#sys-sempost">5.3.2.3. sys_sempost 系统调用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#sys-semwait">5.3.2.4. sys_semwait 系统调用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#sys-semdestroy">5.3.2.5. sys_semdestroy 系统调用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nju.html#id27">5.3.3. 信号量解决生产者消费者问题</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#id28">5.3.3.1. main 函数</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#id29">5.3.3.2. 生产者进程</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nju.html#id30">5.3.3.3. 消费者进程</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nju.html#id31">5.4. 实验结果</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NJU-OS移植</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+
+           </div>
+          </div>
+          <footer>
+
+  <hr />
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022-2024, 奕行智能科技有限公司。
+      <span class="lastupdated">最后更新于 2026年1月23日 14:50:13.
+      </span>
+
+      <!-- 
+      <span class="footer-aside">
+        <a href="./NJU-OS移植.pdf" class="fa fa-file-pdf-o">&nbsp下载 PDF</a>
+      </span>
+       -->
+    </p>
+  </div> 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>
